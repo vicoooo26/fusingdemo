@@ -72,7 +72,7 @@ public class HystrixEntry extends HystrixCommand<String> {
 
         } catch (RetryException e) {
             System.out.println("retry failure");
-            return "retry failure";
+            return getFallback();
         }
         return null;
     }

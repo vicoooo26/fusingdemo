@@ -18,7 +18,7 @@ public class api {
         return executor.execute(value);
     }
 
-    @RequestMapping(value = "/resilience/{value}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/resilience", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String doAnother() {
         return executor.executeAnother();
     }

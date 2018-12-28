@@ -21,8 +21,7 @@ public class Executor {
     private HytrixEntryAnother hytrixEntryAnother;
 
 
-    private List<AbstractService> policyChain = new LinkedList<>();
-
+    private static List<AbstractService> policyChain = new LinkedList<>();
 
     @EventListener(ApplicationReadyEvent.class)
     public void load() {
@@ -44,11 +43,11 @@ public class Executor {
     }
 
     public AbstractService apply() {
-        return policyChain.get(0);
+        return this.policyChain.get(0);
     }
 
     public AbstractService apply2() {
-        return policyChain.get(1);
+        return this.policyChain.get(1);
     }
 
     public String execute(String value) {

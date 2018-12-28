@@ -3,12 +3,8 @@ package tk.vicochu.fusingdemo.Entry;
 import com.github.rholder.retry.*;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import tk.vicochu.fusingdemo.Service.AbstractService;
 import tk.vicochu.fusingdemo.Service.ServiceA;
 
@@ -43,7 +39,7 @@ public class HytrixEntryAnother {
 
         } catch (RetryException e) {
             System.out.println("retry failure");
-            return "retry failure";
+            return getFallback(name);
         }
         return null;
     }
