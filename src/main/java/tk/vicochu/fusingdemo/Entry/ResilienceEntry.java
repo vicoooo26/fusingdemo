@@ -53,7 +53,7 @@ public class ResilienceEntry {
                 //等待请求的超时
                 .timeoutDuration(Duration.ofMillis(1000))
                 .build();
-        
+
         RateLimiter rateLimiter = RateLimiter.of("ratelimiter-demo", rateLimiterConfig);
 
         RetryConfig retryConfig = RetryConfig
