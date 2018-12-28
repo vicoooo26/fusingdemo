@@ -13,16 +13,14 @@ import java.util.concurrent.TimeUnit;
 
 public class HystrixEntry extends HystrixCommand<String> {
 
-    @Autowired
-    private Executor executor;
     private String name;
 
     private static Random random = new Random();
 
     private static Callable<Boolean> retryCall = () -> {
-        int num = random.nextInt(50);
+        int num = random.nextInt(100);
         System.out.println(num);
-        if (num < 20) {
+        if (num < 40) {
             return true;
         } else {
             throw new RuntimeException();
@@ -30,9 +28,9 @@ public class HystrixEntry extends HystrixCommand<String> {
     };
 
     Retryer<Boolean> retryer = RetryerBuilder.<Boolean>newBuilder()
-            .withWaitStrategy(WaitStrategies.fixedWait(10, TimeUnit.SECONDS))
-            .retryIfException()
-            .withStopStrategy(StopStrategies.stopAfterAttempt(3))
+            .withWaitStrategy(WaitStrategies.fixedWait(1, TimeUnit.SECONDS))
+            .retryIfExceptionOfType(RuntimeException.class)
+            .withStopStrategy(StopStrategies.stopAfterAttempt(2))
             .build();
 
 
@@ -42,6 +40,7 @@ public class HystrixEntry extends HystrixCommand<String> {
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                         .withCircuitBreakerEnabled(true)
                         .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD)
+                        //如果设置不当，在重试期间会超时
                         .withExecutionTimeoutInMilliseconds(3000)
                         .withCircuitBreakerErrorThresholdPercentage(40)
                         .withCircuitBreakerRequestVolumeThreshold(5)
@@ -54,7 +53,6 @@ public class HystrixEntry extends HystrixCommand<String> {
                         .withMaxQueueSize(2)
                 )
         );
-
         this.name = name;
     }
 
@@ -74,6 +72,7 @@ public class HystrixEntry extends HystrixCommand<String> {
 
         } catch (RetryException e) {
             System.out.println("retry failure");
+            return "retry failure";
         }
         return null;
     }
@@ -81,7 +80,8 @@ public class HystrixEntry extends HystrixCommand<String> {
     //降级逻辑
     @Override
     protected String getFallback() {
-        return executor.apply2().print(name);
+//        return "fallback";
+        return new Executor().apply2().print(name);
     }
 
 }

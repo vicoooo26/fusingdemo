@@ -13,7 +13,7 @@ public class api {
     @Autowired
     private Executor executor;
 
-    @RequestMapping(value = "/hystrix/{value}", method = RequestMethod.GET)
+    @RequestMapping(value = "/hystrix/{value}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String doSomething(@PathVariable String value) {
         return executor.execute(value);
     }
@@ -22,4 +22,11 @@ public class api {
     public String doAnother() {
         return executor.executeAnother();
     }
+
+    @RequestMapping(value = "/hystrixAnother/{value}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String doAnotherHystrix(@PathVariable String value) {
+        return executor.executeHystrixAnother(value);
+    }
+
+
 }

@@ -17,6 +17,10 @@ public class Executor {
     @Autowired
     private ResilienceEntry resilienceEntry;
 
+    @Autowired
+    private HytrixEntryAnother hytrixEntryAnother;
+
+
     private List<AbstractService> policyChain = new LinkedList<>();
 
 
@@ -53,6 +57,10 @@ public class Executor {
 
     public String executeAnother() {
         return resilienceEntry.realDo();
+    }
+
+    public String executeHystrixAnother(String value) {
+        return hytrixEntryAnother.run(value);
     }
 
 }
